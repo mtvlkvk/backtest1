@@ -1,14 +1,18 @@
 from __future__ import print_function
+
 import datetime
 import numpy as np
 import pandas as pd
+
 import statsmodels.api as sm
+
 from strategy import Strategy
 from event import SignalEvent
 from backtest import Backtest
 from data import HistoricCSVDataHandler
 from execution import SimulatedExecutionHandler
 from portfolio import Portfolio
+from get_data import get_yahoo_data
 
 class MovingAverageCrossStrategy(Strategy):
     """
@@ -60,7 +64,7 @@ class MovingAverageCrossStrategy(Strategy):
                     s, "adj_close", N=self.long_window
                 )
                 bar_date = self.bars.get_latest_bar_datetime(s)
-                if bars is not None and bars != []:
+                if bars.size > 0:  # is not None and bars != []:
                     short_sma = np.mean(bars[-self.short_window:])
                     long_sma = np.mean(bars[-self.long_window:])
                     symbol = s
@@ -80,11 +84,13 @@ class MovingAverageCrossStrategy(Strategy):
                         self.bought[s] = "OUT"
 
 if __name__ == "__main__":
-    csv_dir = "C:/Users/User/PycharmProjects/backtest1" # CHANGE THIS!
-    symbol_list = ["AAPL"]
+    # csv_dir = "C:/Users/User/PycharmProjects/backtest1" # CHANGE THIS!
+    get_yahoo_data('AAPL', '1990-01-01', '2002-01-01')
+    csv_dir = './csv'
+    symbol_list = ['AAPL']
     initial_capital = 100000.0
     heartbeat = 0.0
-    start_date = datetime.datetime(2019, 1, 1, 0, 0, 0)
+    start_date = datetime.datetime(1990, 1, 1, 0, 0, 0)
     backtest = Backtest(
         csv_dir, symbol_list, initial_capital, heartbeat,
         start_date, HistoricCSVDataHandler, SimulatedExecutionHandler,

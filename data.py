@@ -100,7 +100,8 @@ class HistoricCSVDataHandler(DataHandler):
                 header=0, index_col=0, parse_dates=True,
                 names=[
                      "datetime", "open", "high",
-                    "low", "close", "volume", "adj_close"
+                    "low", "close", "adj_close", "volume"
+                    # "low", "close", "volume", "adj_close"
                 ]
            ).sort_index()
             # Combine the index to pad forward values
