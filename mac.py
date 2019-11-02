@@ -3,6 +3,7 @@ from __future__ import print_function
 import datetime
 import numpy as np
 import pandas as pd
+import os, os.path
 
 import statsmodels.api as sm
 
@@ -87,12 +88,26 @@ if __name__ == "__main__":
     # csv_dir = "C:/Users/User/PycharmProjects/backtest1" # CHANGE THIS!
     get_yahoo_data('AAPL', '1990-01-01', '2002-01-01')
     csv_dir = './csv'
+    symbol_data = {}
     symbol_list = ['AAPL']
     initial_capital = 100000.0
     heartbeat = 0.0
     start_date = datetime.datetime(1990, 1, 1, 0, 0, 0)
+
+    for s in symbol_list:
+        # Load the CSV file with no header information, indexed on date
+        symbol_data[s] = pd.io.parsers.read_csv(
+            os.path.join(csv_dir, "%s.csv" % s),
+            header=0, index_col=0, parse_dates=True,
+            names=[
+                'datetime', 'open', 'high',
+                'low', 'close', 'adj_close', 'volume'
+                # "low", "close", "volume", "adj_close"
+            ]
+        ).sort_index()
+
     backtest = Backtest(
-        csv_dir, symbol_list, initial_capital, heartbeat,
+        csv_dir, symbol_list, symbol_data, initial_capital, heartbeat,
         start_date, HistoricCSVDataHandler, SimulatedExecutionHandler,
         Portfolio, MovingAverageCrossStrategy
     )

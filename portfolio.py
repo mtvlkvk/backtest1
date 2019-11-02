@@ -173,7 +173,9 @@ class Portfolio(object):
         symbol = signal.symbol
         direction = signal.signal_type
         strength = signal.strength
-        mkt_quantity = 100
+        price = self.bars.latest_symbol_data[symbol][len(self.bars.latest_symbol_data[symbol])-1][1]['adj_close']
+        mkt_quantity = (self.current_holdings['cash']) // price  # 100
+        # TODO предыдущую строчку обязательно поменять, исходя из количества акций
         cur_quantity = self.current_positions[symbol]
         order_type = "MKT"
         if direction == "LONG" and cur_quantity == 0:
@@ -213,7 +215,8 @@ class Portfolio(object):
         total_return = self.equity_curve["equity_curve"][-1]
         returns = self.equity_curve["returns"]
         pnl = self.equity_curve["equity_curve"]
-        sharpe_ratio = create_sharpe_ratio(returns, periods=252*60*6.5)
+        sharpe_ratio = create_sharpe_ratio(returns, periods=252) #*60*6.5)
+        # здесь похоже не верно считал, так как все же мы статистику ведём пока по дням, а не по часам
         drawdown, max_dd, dd_duration = create_drawdowns(pnl)
         self.equity_curve["drawdown"] = drawdown
         stats = [("Total Return", "%0.2f%%" % \

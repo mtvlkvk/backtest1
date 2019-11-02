@@ -73,7 +73,7 @@ class HistoricCSVDataHandler(DataHandler):
     to obtain the "latest" bar in a manner identical to a live
     trading interface.
     """
-    def __init__(self, events, csv_dir, symbol_list):
+    def __init__(self, events, csv_dir, symbol_list, symbol_data):
         """
         Initialises the historic data handler by requesting
         the location of the CSV files and a list of symbols.
@@ -87,7 +87,7 @@ class HistoricCSVDataHandler(DataHandler):
         self.events = events
         self.csv_dir = csv_dir
         self.symbol_list = symbol_list
-        self.symbol_data = {}
+        self.symbol_data = symbol_data  # {}
         self.latest_symbol_data = {}
         self.continue_backtest = True
         self._open_convert_csv_files()
@@ -100,6 +100,7 @@ class HistoricCSVDataHandler(DataHandler):
         taken from Yahoo. Thus its format will be respected.
         """
         comb_index = None
+        '''
         for s in self.symbol_list:
             # Load the CSV file with no header information, indexed on date
             self.symbol_data[s] = pd.io.parsers.read_csv(
@@ -111,6 +112,8 @@ class HistoricCSVDataHandler(DataHandler):
                     # "low", "close", "volume", "adj_close"
                 ]
             ).sort_index()
+        '''
+        for s in self.symbol_list:
             # добавил следующую строчку, так как, судя по всему, ее и ждут
             self.symbol_data[s]['returns'] = self.symbol_data[s]['adj_close'].pct_change()
             # Combine the index to pad forward values

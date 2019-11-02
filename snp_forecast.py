@@ -3,6 +3,7 @@
 # snp_forecast.py
 from __future__ import print_function
 import datetime
+import os, os.path
 # import pandas as pd
 # from sklearn.qda import QDA
 from all_imports import pd, np
@@ -86,11 +87,25 @@ if __name__ == "__main__":
     get_yahoo_data('SPY', '2006-01-03', '2014-10-10')
     csv_dir = './csv' # CHANGE THIS!
     symbol_list = ['SPY']
+    symbol_data = {}
     initial_capital = 100000.0
     heartbeat = 0.0
     start_date = datetime.datetime(2006, 1, 3)
+
+    for s in symbol_list:
+        # Load the CSV file with no header information, indexed on date
+        symbol_data[s] = pd.io.parsers.read_csv(
+            os.path.join(csv_dir, "%s.csv" % s),
+            header=0, index_col=0, parse_dates=True,
+            names=[
+                'datetime', 'open', 'high',
+                'low', 'close', 'adj_close', 'volume'
+                # "low", "close", "volume", "adj_close"
+            ]
+        ).sort_index()
+
     backtest = Backtest(
-        csv_dir, symbol_list, initial_capital, heartbeat,
+        csv_dir, symbol_list, symbol_data, initial_capital, heartbeat,
         start_date, HistoricCSVDataHandler, SimulatedExecutionHandler,
         Portfolio, SPYDailyForecastStrategy
     )
