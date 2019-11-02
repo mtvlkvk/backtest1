@@ -10,16 +10,16 @@ class Event(object):
 
 
 class MarketEvent(Event):
-# Handles the event of receiving a new market update with
-# corresponding bars.
+    # Handles the event of receiving a new market update with
+    # corresponding bars.
     def __init__(self):
         # Initialises the MarketEvent.
-        self.type ="MARKET"
+        self.type = "MARKET"
 
 
 class SignalEvent(Event):
-# Handles the event of sending a Signal from a Strategy object.
-# This is received by a Portfolio object and acted upon.
+    # Handles the event of sending a Signal from a Strategy object.
+    # This is received by a Portfolio object and acted upon.
     def __init__(self, strategy_id, symbol, datetime, signal_type, strength):
         """
         Initialises the SignalEvent.
@@ -32,7 +32,7 @@ class SignalEvent(Event):
         strength - An adjustment factor "suggestion" used to scale
         quantity at the portfolio level. Useful for pairs strategies.
         """
-        self.type = "SIGNAL"
+        self.type = 'SIGNAL'
         self.strategy_id = strategy_id
         self.symbol = symbol
         self.datetime = datetime
@@ -58,7 +58,7 @@ class OrderEvent(Event):
         quantity - Non-negative integer for quantity.
         direction - "BUY" or "SELL" for long or short.
         """
-        self.type = "ORDER"
+        self.type = 'ORDER'
         self.symbol = symbol
         self.order_type = order_type
         self.quantity = quantity
@@ -68,10 +68,7 @@ class OrderEvent(Event):
         """
         Outputs the values within the Order.
         """
-        print(
-        "Order: Symbol=%s, Type=%s, Quantity=%s, Direction=%s" %
-        (self.symbol, self.order_type, self.quantity, self.direction)
-        )
+        print(f'Order: Symbol={self.symbol}, Type={self.order_type}, Quantity={self.quantity}, Direction={self.direction}')
 
 
 class FillEvent(Event):
@@ -82,7 +79,7 @@ class FillEvent(Event):
     the commission of the trade from the brokerage.
     """
     def __init__(self, timeindex, symbol, exchange, quantity,
-        direction, fill_cost, commission=None):
+                 direction, fill_cost, commission=None):
         """
         Initialises the FillEvent object. Sets the symbol, exchange,
         quantity, direction, cost of fill and an optional
@@ -99,7 +96,7 @@ class FillEvent(Event):
         fill_cost - The holdings value in dollars.
         commission - An optional commission sent from IB.
         """
-        self.type = "FILL"
+        self.type = 'FILL'
         self.timeindex = timeindex
         self.symbol = symbol
         self.exchange = exchange
@@ -124,6 +121,6 @@ class FillEvent(Event):
         full_cost = 1.3
         if self.quantity <= 500:
             full_cost = max(1.3, 0.013 * self.quantity)
-        else: # Greater than 500
+        else:  # Greater than 500
             full_cost = max(1.3, 0.008 * self.quantity)
-        return full_cost    
+        return full_cost

@@ -7,6 +7,7 @@ from ib.opt import ibConnection, message
 from event import FillEvent, OrderEvent
 from execution import ExecutionHandler
 
+
 class IBExecutionHandler(ExecutionHandler):
     """
     Handles order execution via the Interactive Brokers
@@ -14,7 +15,7 @@ class IBExecutionHandler(ExecutionHandler):
     directly.
     """
     def __init__(
-    self, events, order_routing="SMART", currency="USD"
+            self, events, order_routing='SMART', currency='USD'
     ):
         """
         Initialises the IBExecutionHandler instance.

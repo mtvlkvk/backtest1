@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from event import MarketEvent
 
+
 class DataHandler(object):
     """
     DataHandler is an abstract base class providing an interface for
@@ -17,24 +18,28 @@ class DataHandler(object):
     system will be treated identically by the rest of the backtesting suite.
     """
     __metaclass__ = ABCMeta
+
     @abstractmethod
     def get_latest_bar(self, symbol):
         """
         Returns the last bar updated.
         """
         raise NotImplementedError("Should implement get_latest_bar()")
+
     @abstractmethod
     def get_latest_bars(self, symbol, N=1):
         """
         Returns the last N bars updated.
         """
         raise NotImplementedError("Should implement get_latest_bars()")
+
     @abstractmethod
     def get_latest_bar_datetime(self, symbol):
         """
         Returns a Python datetime object for the last bar.
         """
         raise NotImplementedError("Should implement get_latest_bar_datetime()")
+
     @abstractmethod
     def get_latest_bar_value(self, symbol, val_type):
         """
@@ -42,6 +47,7 @@ class DataHandler(object):
         from the last bar.
         """
         raise NotImplementedError("Should implement get_latest_bar_value()")
+
     @abstractmethod
     def get_latest_bars_values(self, symbol, val_type, N=1):
         """
@@ -49,6 +55,7 @@ class DataHandler(object):
         latest_symbol list, or N-k if less available.
         """
         raise NotImplementedError("Should implement get_latest_bars_values()")
+
     @abstractmethod
     def update_bars(self):
         """
@@ -99,8 +106,8 @@ class HistoricCSVDataHandler(DataHandler):
                 os.path.join(self.csv_dir, "%s.csv" % s),
                 header=0, index_col=0, parse_dates=True,
                 names=[
-                     "datetime", "open", "high",
-                    "low", "close", "adj_close", "volume"
+                     'datetime', 'open', 'high',
+                    'low', 'close', 'adj_close', 'volume'
                     # "low", "close", "volume", "adj_close"
                 ]
             ).sort_index()
@@ -117,7 +124,6 @@ class HistoricCSVDataHandler(DataHandler):
         for s in self.symbol_list:
             self.symbol_data[s] = self.symbol_data[s].\
                 reindex(index=comb_index, method="pad").iterrows()
-
 
     def _get_new_bar(self, symbol):
         """

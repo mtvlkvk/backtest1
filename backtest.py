@@ -7,6 +7,7 @@ except ImportError:
     import queue
 import time
 
+
 class Backtest(object):
     """
     Enscapsulates the settings and components for carrying out
@@ -111,9 +112,9 @@ class Backtest(object):
         print("Creating equity curve...")
         print(self.portfolio.equity_curve.tail(10))
         pprint.pprint(stats)
-        print("Signals: %s" % self.signals)
-        print("Orders: %s" % self.orders)
-        print("Fills: %s" % self.fills)
+        print(f'Signals: {self.signals}')
+        print(f'Orders: {self.orders}')
+        print(f'Fills: {self.fills}')
 
     def simulate_trading(self):
         """

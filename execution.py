@@ -7,6 +7,7 @@ except ImportError:
     import queue
 from event import FillEvent, OrderEvent
 
+
 class ExecutionHandler(object):
 
     """
@@ -20,6 +21,7 @@ class ExecutionHandler(object):
         live trading engine.
     """
     __metaclass__ = ABCMeta
+
     @abstractmethod
     def execute_order(self, event):
         """
@@ -29,6 +31,7 @@ class ExecutionHandler(object):
         event - Contains an Event object with order information.
         """
         raise NotImplementedError('Should implement execute_order')
+
 
 class SimulatedExecutionHandler(ExecutionHandler):
     """
@@ -48,6 +51,7 @@ class SimulatedExecutionHandler(ExecutionHandler):
             """
 
             self.events = events
+
     def execute_order(self, event):
         """
         Simply converts Order objects into Fill objects naively,
