@@ -10,6 +10,8 @@ import pandas as pd
 from event import FillEvent, OrderEvent
 from performance import create_sharpe_ratio, create_drawdowns
 
+from draw_plot import draw
+
 class Portfolio(object):
     """
     The Portfolio class handles the positions and market
@@ -220,5 +222,7 @@ class Portfolio(object):
             ("Drawdown Duration", "%d" % dd_duration)]
 
         self.equity_curve.to_csv("equity.csv")
+        draw(self.equity_curve['equity_curve'])
+        # TODO Здесь рисует график. В идеале перенести его нужно по результатам выполнения бэктестинга
         return stats
 

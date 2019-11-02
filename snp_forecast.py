@@ -56,7 +56,8 @@ class SPYDailyForecastStrategy(Strategy):
         """
         sym = self.symbol_list[0]
         dt = self.datetime_now
-        if event.type == 'MARKET': self.bar_index += 1
+        if event.type == 'MARKET':
+            self.bar_index += 1
         if self.bar_index > 5:
             lags = self.bars.get_latest_bars_values(
                 # self.symbol_list[0], "returns", N=3
@@ -86,7 +87,7 @@ if __name__ == "__main__":
     symbol_list = ['SPY']
     initial_capital = 100000.0
     heartbeat = 0.0
-    start_date = datetime.datetime(2006,1,3)
+    start_date = datetime.datetime(2006, 1, 3)
     backtest = Backtest(
         csv_dir, symbol_list, initial_capital, heartbeat,
         start_date, HistoricCSVDataHandler, SimulatedExecutionHandler,

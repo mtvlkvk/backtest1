@@ -2,6 +2,8 @@ import pandas as pd
 import yfinance as yf
 
 def get_yahoo_data(yahoo_id, start_date, end_date):
+    # TODO Здесь все нужно переписать с тем, чтобы данные хранились в базе данных
+    # и их можно было бы выбирать посредством frame
     csv_path = './csv/{}.csv'.format(yahoo_id)
     try:
         df = pd.read_csv(csv_path)

@@ -1,10 +1,13 @@
 # event.py
 from __future__ import print_function
+
+
 class Event(object):
     # Event is base class providing an interface for all subsequent
     # (inherited) events, that will trigger further events in the
     # trading infrastructure.
     pass
+
 
 class MarketEvent(Event):
 # Handles the event of receiving a new market update with
@@ -12,6 +15,7 @@ class MarketEvent(Event):
     def __init__(self):
         # Initialises the MarketEvent.
         self.type ="MARKET"
+
 
 class SignalEvent(Event):
 # Handles the event of sending a Signal from a Strategy object.
@@ -59,6 +63,7 @@ class OrderEvent(Event):
         self.order_type = order_type
         self.quantity = quantity
         self.direction = direction
+
     def print_order(self):
         """
         Outputs the values within the Order.
@@ -106,6 +111,7 @@ class FillEvent(Event):
             self.commission = self.calculate_ib_commission()
         else:
             self.commission = commission
+
     def calculate_ib_commission(self):
         """
         Calculates the fees of trading based on an Interactive

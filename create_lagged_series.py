@@ -12,39 +12,28 @@ from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 from sklearn.metrics import confusion_matrix
 # from sklearn.qda import QDA
 from sklearn.svm import LinearSVC, SVC
+from all_imports import yf
 
 
 def create_lagged_series(symbol, start_date, end_date, lags=5):
     """
-   This creates a Pandas DataFrame that stores the
-    percentage returns of the adjusted closing value of
-    a stock obtained from Yahoo Finance, along with a number of lagged returns from the prior trading days
-    (lags defaults to 5 days). Trading volume, as well as
-    the Direction from the previous day, are also included. """
+    В общем, сильно поменял. Результат тот же, оригинал в книжке
+    """
     # Obtain stock information from Yahoo Finance
+    '''
+    # так было, но переписал с использованием yf, который мне понятнее. Плюс не понимаю,
+    # почему конкретно здеса автор использует DataReader
     ts = web.DataReader(
         symbol, "yahoo",
         start_date - datetime.timedelta(days=365),
         end_date)
-    # Create the new lagged DataFrame
-    tslag = pd.DataFrame(index=ts.index)
-    tslag["Today"] = ts["Adj Close"]
-    tslag["Volume"] = ts["Volume"]
-    # Create the shifted lag series of prior trading period close values
+    '''
+    ts = yf.download(symbol, start=start_date - datetime.timedelta(days=365), end=end_date)
+    tsret = pd.DataFrame({'Today': ts['Adj Close'].pct_change() * 100, 'Volume': ts['Volume']})
     for i in range(0, lags):
-        tslag["Lag%s" % str(i + 1)] = ts["Adj Close"].shift(i + 1) # Create the returns DataFrame
-    tsret = pd.DataFrame(index=tslag.index)
-    tsret["Volume"] = tslag["Volume"]
-    tsret["Today"] = tslag["Today"].pct_change() * 100.0
-    # If any of the values of percentage returns equal zero, set them to # a small number (stops
-    # issues with QDA model in Scikit-Learn)
-    for i, x in enumerate(tsret["Today"]):
-        if (abs(x) < 0.0001): tsret["Today"][i] = 0.0001
-    # Create the lagged percentage returns columns
-    for i in range(0, lags):
-        tsret["Lag%s" % str(i + 1)] = \
-            tslag["Lag%s" % str(i + 1)].pct_change() * 100.0
-    # Create the "Direction" column (+1 or -1) indicating an up/down day
+        tsret[f'Lag{str(i+1)}'] = ts["Adj Close"].shift(i + 1).pct_change() * 100.0
+    tsret.loc[abs(tsret['Today']) < 0.0001, 'Today'] = 0.0001
     tsret["Direction"] = np.sign(tsret["Today"])
     tsret = tsret[tsret.index >= start_date]
     return tsret
+
