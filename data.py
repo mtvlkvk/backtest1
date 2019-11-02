@@ -103,7 +103,9 @@ class HistoricCSVDataHandler(DataHandler):
                     "low", "close", "adj_close", "volume"
                     # "low", "close", "volume", "adj_close"
                 ]
-           ).sort_index()
+            ).sort_index()
+            # добавил следующую строчку, так как, судя по всему, ее и ждут
+            self.symbol_data[s]['returns'] = self.symbol_data[s]['adj_close'].pct_change()
             # Combine the index to pad forward values
             if comb_index is None:
                 comb_index = self.symbol_data[s].index

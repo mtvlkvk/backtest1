@@ -3,8 +3,9 @@
 # snp_forecast.py
 from __future__ import print_function
 import datetime
-import pandas as pd
+# import pandas as pd
 # from sklearn.qda import QDA
+from all_imports import pd, np
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 from strategy import Strategy
 from event import SignalEvent
@@ -61,7 +62,7 @@ class SPYDailyForecastStrategy(Strategy):
         if self.bar_index > 5:
             lags = self.bars.get_latest_bars_values(
                 # self.symbol_list[0], "returns", N=3
-                self.symbol_list[0], 'adj_close', N=3
+                self.symbol_list[0], 'returns', N=3
                 # TODO: на самом деле не ясно, что здесь он хотел использовать returns или adj_close
             )
             pred_series = pd.Series(
@@ -70,7 +71,7 @@ class SPYDailyForecastStrategy(Strategy):
                     'Lag2': lags[2] * 100.0
                 }
             )
-            pred = self.model.predict(pred_series)
+            pred = self.model.predict(np.array(pred_series).reshape(1, -1))
             if pred > 0 and not self.long_market:
                 self.long_market = True
                 signal = SignalEvent(1, sym, dt, 'LONG', 1.0)

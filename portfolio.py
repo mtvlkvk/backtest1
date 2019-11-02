@@ -12,6 +12,7 @@ from performance import create_sharpe_ratio, create_drawdowns
 
 from draw_plot import draw
 
+
 class Portfolio(object):
     """
     The Portfolio class handles the positions and market
@@ -67,6 +68,7 @@ class Portfolio(object):
         d["commission"] = 0.0
         d["total"] = self.initial_capital
         return [d]
+
     def construct_current_holdings(self):
         """
         This constructs the dictionary which will hold the instantaneous
@@ -158,7 +160,6 @@ class Portfolio(object):
         if event.type == "FILL":
             self.update_positions_from_fill(event)
             self.update_holdings_from_fill(event)
-
 
     def generate_naive_order(self, signal):
         """
