@@ -13,6 +13,7 @@ from sklearn.metrics import confusion_matrix
 # from sklearn.qda import QDA
 from sklearn.svm import LinearSVC, SVC
 from all_imports import yf
+from get_data import get_polo_data
 
 
 def create_lagged_series(symbol, start_date, end_date, lags=5):
@@ -37,3 +38,20 @@ def create_lagged_series(symbol, start_date, end_date, lags=5):
     tsret = tsret[tsret.index >= start_date]
     return tsret
 
+
+def create_lagged_polo(symbol, start_date, lags=5):
+    '''
+
+    '''
+    # ts = yf.download(symbol, start=start_date - datetime.timedelta(days=365), end=end_date)
+    ts = get_polo_data(pair=symbol, frame=(datetime.datetime.now().timestamp() - start_date.timestamp())*2)
+    ts = ts[ts.index < start_date]
+    tsret = pd.DataFrame({'Today': ts['weightedAverage'].pct_change() * 100, 'Volume': ts['volume']})
+    for i in range(0, lags):
+        tsret[f'Lag{str(i+1)}'] = ts['weightedAverage'].shift(i + 1).pct_change() * 100.0
+    tsret.loc[abs(tsret['Today']) < 0.0001, 'Today'] = 0.0001
+    tsret["Direction"] = np.sign(tsret["Today"])
+    tsret = tsret.iloc[(lags+1):, :]
+    # tsret = tsret[tsret.index >= start_date]
+    # TODO Почему nan у первых 6, а не 5?
+    return tsret

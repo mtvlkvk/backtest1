@@ -61,7 +61,8 @@ class Backtest(object):
         )
         self.data_handler = self.data_handler_cls(self.events, self.csv_dir,
                                                   self.symbol_list, self.symbol_data)
-        self.strategy = self.strategy_cls(self.data_handler, self.events)
+        self.strategy = self.strategy_cls(self.data_handler, self.events,
+                                          self.start_date)  # добавил start_date для модели
         self.portfolio = self.portfolio_cls(self.data_handler, self.events,
                                             self.start_date,
                                             self.initial_capital)

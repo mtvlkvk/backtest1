@@ -22,7 +22,7 @@ class SPYDailyForecastStrategy(Strategy):
     """
     S&P500 forecast strategy. It uses a Quadratic Discriminant Analyser to predict the returns
      for a subsequent time period and then generated long/exit signals based on the prediction."""
-    def __init__(self, bars, events):
+    def __init__(self, bars, events, start_date):
         self.bars = bars
         self.symbol_list = self.bars.symbol_list
         self.events = events

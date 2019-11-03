@@ -22,7 +22,7 @@ class MovingAverageCrossStrategy(Strategy):
     windows are 100/400 periods respectively.
     """
     def __init__(
-    self, bars, events, short_window=100, long_window=400
+    self, bars, events, start_date, short_window=100, long_window=400
     ):
         """
         Initialises the Moving Average Cross Strategy.
